@@ -1,0 +1,1 @@
+{{ nom := 'Brouette'; prenom := 'Quentin'; cours := ('Logique 1', 'Logique 2', 'Algebre 1', 'Math elem');}} 
