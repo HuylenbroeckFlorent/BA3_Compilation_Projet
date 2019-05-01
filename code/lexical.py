@@ -9,18 +9,34 @@ states = (
          )
 
 tokens = (
-        'TXT'
+        'TXT',
         #Partie DATA
         'BLOCKstart', 'BLOCKend', 
+        'BOOL', 'ANDOR', 'PRINT', 'ELSE', 'FOR', 'IN', 'ENDFOR', 'DO', 'IF', 'ENDIF',
         'AFFECT', 'VARIABLE', 'SEMICOLON', 'COMA', 'LPAREN', 'RPAREN', 'APOSTROPHE', 'STR',
         #Partie TEMPLATE
-        'ADD_OP', 'MUL_OP' 
+        'ADD_OP', 'MUL_OP' , 'INT', 'COMPARE', 'POINT'
         #, 'newline'
          )
 
 t_ADD_OP = r'\+|-'
 t_MUL_OP = r'\*|/'
 t_COMA = r','
+
+#t_BLOCK_BOOL = r'true|false'
+#t_BLOCK_ANDOR = r'and|or'
+#t_BLOCK_PRINT = r'print'
+#t_BLOCK_ELSE = r'else'
+#t_BLOCK_FOR = r'for'
+#t_BLOCK_IN = r'in'
+#t_BLOCK_ENDFOR = r'endfor'
+#t_BLOCK_DO = r'do'
+#t_BLOCK_IF = r'if'
+#t_BLOCK_ENDIF = r'endif'
+
+t_BLOCK_POINT = r'\.'
+t_BLOCK_INT = r'\d+'
+t_BLOCK_COMPARE = r'<|>|<=|>=|=|!='
 t_BLOCK_ignore = ' \t'
 
 def t_BLOCK_LPAREN(t):
@@ -38,6 +54,46 @@ def t_BLOCK_RPAREN(t):
 def t_BLOCKstart(t):
     r'{{'
     t.lexer.begin('BLOCK')
+    return t
+
+def t_BLOCK_BOOL(t):
+    r'true|false'
+    return t
+
+def t_BLOCK_ANDOR(t):
+    r'and|or'
+    return t
+
+def t_BLOCK_PRINT(t):
+    r'print'
+    return t
+
+def t_BLOCK_ELSE(t):
+    r'else'
+    return t
+
+def t_BLOCK_FOR(t):
+    r'for'
+    return t
+
+def t_BLOCK_ENDIF(t):
+    r'endif'
+    return t
+
+def t_BLOCK_IF(t):
+    r'if'
+    return t
+
+def t_BLOCK_ENDFOR(t):
+    r'endfor'
+    return t
+
+def t_BLOCK_IN(t):
+    r'in'
+    return t
+
+def t_BLOCK_DO(t):
+    r'do'
     return t
 
 def t_BLOCK_BLOCKend(t):
