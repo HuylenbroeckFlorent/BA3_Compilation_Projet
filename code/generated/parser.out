@@ -1,0 +1,75 @@
+Created by PLY version 3.10 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    BOOL
+    ANDOR
+    ELSE
+    IF
+    ENDIF
+    AFFECT
+    COMA
+    LPAREN
+    RPAREN
+    APOSTROPHE
+    STR
+    ADD_OP
+    MUL_OP
+    INT
+    COMPARE
+    POINT
+
+Grammar
+
+Rule 0     S' -> programme
+Rule 1     programme -> txt
+Rule 2     programme -> txt programme
+Rule 3     programme -> dumbo_bloc
+Rule 4     programme -> dumbo_bloc programme
+Rule 5     txt -> TXT
+Rule 6     dumbo_bloc -> BLOCKstart expression_list BLOCKend
+Rule 7     expression_list -> expression SEMICOLON expression_list
+Rule 8     expression_list -> expression SEMICOLON
+Rule 9     expression -> PRINT string_expression
+Rule 10    expression -> FOR VARIABLE IN string_list DO expression_list ENDFOR
+
+Terminals, with rules where they appear
+
+ADD_OP               : 
+AFFECT               : 
+ANDOR                : 
+APOSTROPHE           : 
+BLOCKend             : 6
+BLOCKstart           : 6
+BOOL                 : 
+COMA                 : 
+COMPARE              : 
+DO                   : 10
+ELSE                 : 
+ENDFOR               : 10
+ENDIF                : 
+FOR                  : 10
+IF                   : 
+IN                   : 10
+INT                  : 
+LPAREN               : 
+MUL_OP               : 
+POINT                : 
+PRINT                : 9
+RPAREN               : 
+SEMICOLON            : 7 8
+STR                  : 
+TXT                  : 5
+VARIABLE             : 10
+error                : 
+
+Nonterminals, with rules where they appear
+
+dumbo_bloc           : 3 4
+expression           : 7 8
+expression_list      : 6 7 10
+programme            : 2 4 0
+string_expression    : 9
+string_list          : 10
+txt                  : 1 2
+
