@@ -3,9 +3,6 @@ import queue
 
 npar = 0
 
-#bannednames=['true','false','for','endfor','in','do','if','else','endif','print','and','or']
-usednames={}  #Les variables
-             
 states = (
          ('BLOCK', 'inclusive'),
          ('STRING', 'inclusive'),
@@ -25,7 +22,6 @@ tokens = (
 t_ADD_OP = r'\+|-'
 t_MUL_OP = r'\*|/'
 t_COMA = r','
-t_BLOCK_COMA = r','
 
 #t_BLOCK_BOOL = r'true|false'
 #t_BLOCK_ANDOR = r'and|or'
@@ -115,11 +111,7 @@ def t_BLOCK_AFFECT(t):
 
 def t_BLOCK_VARIABLE(t):
     r'[a-zA-Z0-9_]+\w*'  #Ou juste r'\w+' ?
-    if(t.value in usednames):
-        return t
-    else:
-        usednames[t.value]= None
-        return t             #Penser à également virer les nom de variables réservés (comme "for")
+    return t             #Penser à également virer les nom de variables réservées (comme "for")
 
 def t_BLOCK_SEMICOLON(t):
     r';'
@@ -168,20 +160,3 @@ if __name__ == "__main__":
     lexer.input(sys.stdin.read())
     for token in lexer:
         print("line %d : %s (%s) " % (token.lineno, token.type, token.value))
-
-
-"""
-banned = {
-    'true':'BOOL',
-    'false':'BOOL',
-    'and':'COMPARE', 
-    'or':'COMPARE',    
-    'print':'PRINT',
-    'in':'IN',
-    'do':'DO',
-    'if':'IF',
-    'else':'ELSE',
-    'endif':'ENDIF',}
-    #for
-    t.type = banned.get(t.value,'VARIABLE')
-"""
