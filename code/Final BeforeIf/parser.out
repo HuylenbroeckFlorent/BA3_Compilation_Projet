@@ -1,0 +1,532 @@
+Created by PLY version 3.10 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    BOOL
+    ANDOR
+    ELSE
+    IF
+    ENDIF
+    APOSTROPHE
+    ADD_OP
+    MUL_OP
+    INT
+    COMPARE
+
+Grammar
+
+Rule 0     S' -> programme
+Rule 1     programme -> txt
+Rule 2     programme -> txt programme
+Rule 3     programme -> dumbo_bloc
+Rule 4     programme -> dumbo_bloc programme
+Rule 5     txt -> TXT
+Rule 6     dumbo_bloc -> BLOCKstart expression_list BLOCKend
+Rule 7     expression_list -> expression SEMICOLON expression_list
+Rule 8     expression_list -> expression SEMICOLON
+Rule 9     expression -> PRINT string_expression
+Rule 10    expression -> FOR VARIABLE IN variable DO expression_list ENDFOR
+Rule 11    expression -> FOR VARIABLE IN string_list DO expression_list ENDFOR
+Rule 12    expression -> VARIABLE AFFECT string_expression
+Rule 13    expression -> VARIABLE AFFECT string_list
+Rule 14    string_expression -> string
+Rule 15    string_expression -> variable
+Rule 16    string_expression -> string_expression POINT string_expression
+Rule 17    string_list -> LPAREN string_list_interior RPAREN
+Rule 18    string_list_interior -> string COMA string_list_interior
+Rule 19    string_list_interior -> string
+Rule 20    variable -> VARIABLE
+Rule 21    string -> STR
+
+Terminals, with rules where they appear
+
+ADD_OP               : 
+AFFECT               : 12 13
+ANDOR                : 
+APOSTROPHE           : 
+BLOCKend             : 6
+BLOCKstart           : 6
+BOOL                 : 
+COMA                 : 18
+COMPARE              : 
+DO                   : 10 11
+ELSE                 : 
+ENDFOR               : 10 11
+ENDIF                : 
+FOR                  : 10 11
+IF                   : 
+IN                   : 10 11
+INT                  : 
+LPAREN               : 17
+MUL_OP               : 
+POINT                : 16
+PRINT                : 9
+RPAREN               : 17
+SEMICOLON            : 7 8
+STR                  : 21
+TXT                  : 5
+VARIABLE             : 10 11 12 13 20
+error                : 
+
+Nonterminals, with rules where they appear
+
+dumbo_bloc           : 3 4
+expression           : 7 8
+expression_list      : 6 7 10 11
+programme            : 2 4 0
+string               : 14 18 19
+string_expression    : 9 12 16 16
+string_list          : 11 13
+string_list_interior : 17 18
+txt                  : 1 2
+variable             : 10 15
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . programme
+    (1) programme -> . txt
+    (2) programme -> . txt programme
+    (3) programme -> . dumbo_bloc
+    (4) programme -> . dumbo_bloc programme
+    (5) txt -> . TXT
+    (6) dumbo_bloc -> . BLOCKstart expression_list BLOCKend
+
+    TXT             shift and go to state 4
+    BLOCKstart      shift and go to state 5
+
+    programme                      shift and go to state 1
+    txt                            shift and go to state 2
+    dumbo_bloc                     shift and go to state 3
+
+state 1
+
+    (0) S' -> programme .
+
+
+
+state 2
+
+    (1) programme -> txt .
+    (2) programme -> txt . programme
+    (1) programme -> . txt
+    (2) programme -> . txt programme
+    (3) programme -> . dumbo_bloc
+    (4) programme -> . dumbo_bloc programme
+    (5) txt -> . TXT
+    (6) dumbo_bloc -> . BLOCKstart expression_list BLOCKend
+
+    $end            reduce using rule 1 (programme -> txt .)
+    TXT             shift and go to state 4
+    BLOCKstart      shift and go to state 5
+
+    txt                            shift and go to state 2
+    programme                      shift and go to state 6
+    dumbo_bloc                     shift and go to state 3
+
+state 3
+
+    (3) programme -> dumbo_bloc .
+    (4) programme -> dumbo_bloc . programme
+    (1) programme -> . txt
+    (2) programme -> . txt programme
+    (3) programme -> . dumbo_bloc
+    (4) programme -> . dumbo_bloc programme
+    (5) txt -> . TXT
+    (6) dumbo_bloc -> . BLOCKstart expression_list BLOCKend
+
+    $end            reduce using rule 3 (programme -> dumbo_bloc .)
+    TXT             shift and go to state 4
+    BLOCKstart      shift and go to state 5
+
+    dumbo_bloc                     shift and go to state 3
+    programme                      shift and go to state 7
+    txt                            shift and go to state 2
+
+state 4
+
+    (5) txt -> TXT .
+
+    TXT             reduce using rule 5 (txt -> TXT .)
+    BLOCKstart      reduce using rule 5 (txt -> TXT .)
+    $end            reduce using rule 5 (txt -> TXT .)
+
+
+state 5
+
+    (6) dumbo_bloc -> BLOCKstart . expression_list BLOCKend
+    (7) expression_list -> . expression SEMICOLON expression_list
+    (8) expression_list -> . expression SEMICOLON
+    (9) expression -> . PRINT string_expression
+    (10) expression -> . FOR VARIABLE IN variable DO expression_list ENDFOR
+    (11) expression -> . FOR VARIABLE IN string_list DO expression_list ENDFOR
+    (12) expression -> . VARIABLE AFFECT string_expression
+    (13) expression -> . VARIABLE AFFECT string_list
+
+    PRINT           shift and go to state 10
+    FOR             shift and go to state 11
+    VARIABLE        shift and go to state 12
+
+    expression_list                shift and go to state 8
+    expression                     shift and go to state 9
+
+state 6
+
+    (2) programme -> txt programme .
+
+    $end            reduce using rule 2 (programme -> txt programme .)
+
+
+state 7
+
+    (4) programme -> dumbo_bloc programme .
+
+    $end            reduce using rule 4 (programme -> dumbo_bloc programme .)
+
+
+state 8
+
+    (6) dumbo_bloc -> BLOCKstart expression_list . BLOCKend
+
+    BLOCKend        shift and go to state 13
+
+
+state 9
+
+    (7) expression_list -> expression . SEMICOLON expression_list
+    (8) expression_list -> expression . SEMICOLON
+
+    SEMICOLON       shift and go to state 14
+
+
+state 10
+
+    (9) expression -> PRINT . string_expression
+    (14) string_expression -> . string
+    (15) string_expression -> . variable
+    (16) string_expression -> . string_expression POINT string_expression
+    (21) string -> . STR
+    (20) variable -> . VARIABLE
+
+    STR             shift and go to state 18
+    VARIABLE        shift and go to state 19
+
+    string_expression              shift and go to state 15
+    string                         shift and go to state 16
+    variable                       shift and go to state 17
+
+state 11
+
+    (10) expression -> FOR . VARIABLE IN variable DO expression_list ENDFOR
+    (11) expression -> FOR . VARIABLE IN string_list DO expression_list ENDFOR
+
+    VARIABLE        shift and go to state 20
+
+
+state 12
+
+    (12) expression -> VARIABLE . AFFECT string_expression
+    (13) expression -> VARIABLE . AFFECT string_list
+
+    AFFECT          shift and go to state 21
+
+
+state 13
+
+    (6) dumbo_bloc -> BLOCKstart expression_list BLOCKend .
+
+    TXT             reduce using rule 6 (dumbo_bloc -> BLOCKstart expression_list BLOCKend .)
+    BLOCKstart      reduce using rule 6 (dumbo_bloc -> BLOCKstart expression_list BLOCKend .)
+    $end            reduce using rule 6 (dumbo_bloc -> BLOCKstart expression_list BLOCKend .)
+
+
+state 14
+
+    (7) expression_list -> expression SEMICOLON . expression_list
+    (8) expression_list -> expression SEMICOLON .
+    (7) expression_list -> . expression SEMICOLON expression_list
+    (8) expression_list -> . expression SEMICOLON
+    (9) expression -> . PRINT string_expression
+    (10) expression -> . FOR VARIABLE IN variable DO expression_list ENDFOR
+    (11) expression -> . FOR VARIABLE IN string_list DO expression_list ENDFOR
+    (12) expression -> . VARIABLE AFFECT string_expression
+    (13) expression -> . VARIABLE AFFECT string_list
+
+    BLOCKend        reduce using rule 8 (expression_list -> expression SEMICOLON .)
+    ENDFOR          reduce using rule 8 (expression_list -> expression SEMICOLON .)
+    PRINT           shift and go to state 10
+    FOR             shift and go to state 11
+    VARIABLE        shift and go to state 12
+
+    expression                     shift and go to state 9
+    expression_list                shift and go to state 22
+
+state 15
+
+    (9) expression -> PRINT string_expression .
+    (16) string_expression -> string_expression . POINT string_expression
+
+    SEMICOLON       reduce using rule 9 (expression -> PRINT string_expression .)
+    POINT           shift and go to state 23
+
+
+state 16
+
+    (14) string_expression -> string .
+
+    POINT           reduce using rule 14 (string_expression -> string .)
+    SEMICOLON       reduce using rule 14 (string_expression -> string .)
+
+
+state 17
+
+    (15) string_expression -> variable .
+
+    POINT           reduce using rule 15 (string_expression -> variable .)
+    SEMICOLON       reduce using rule 15 (string_expression -> variable .)
+
+
+state 18
+
+    (21) string -> STR .
+
+    POINT           reduce using rule 21 (string -> STR .)
+    SEMICOLON       reduce using rule 21 (string -> STR .)
+    COMA            reduce using rule 21 (string -> STR .)
+    RPAREN          reduce using rule 21 (string -> STR .)
+
+
+state 19
+
+    (20) variable -> VARIABLE .
+
+    POINT           reduce using rule 20 (variable -> VARIABLE .)
+    SEMICOLON       reduce using rule 20 (variable -> VARIABLE .)
+    DO              reduce using rule 20 (variable -> VARIABLE .)
+
+
+state 20
+
+    (10) expression -> FOR VARIABLE . IN variable DO expression_list ENDFOR
+    (11) expression -> FOR VARIABLE . IN string_list DO expression_list ENDFOR
+
+    IN              shift and go to state 24
+
+
+state 21
+
+    (12) expression -> VARIABLE AFFECT . string_expression
+    (13) expression -> VARIABLE AFFECT . string_list
+    (14) string_expression -> . string
+    (15) string_expression -> . variable
+    (16) string_expression -> . string_expression POINT string_expression
+    (17) string_list -> . LPAREN string_list_interior RPAREN
+    (21) string -> . STR
+    (20) variable -> . VARIABLE
+
+    LPAREN          shift and go to state 27
+    STR             shift and go to state 18
+    VARIABLE        shift and go to state 19
+
+    string_expression              shift and go to state 25
+    string_list                    shift and go to state 26
+    string                         shift and go to state 16
+    variable                       shift and go to state 17
+
+state 22
+
+    (7) expression_list -> expression SEMICOLON expression_list .
+
+    BLOCKend        reduce using rule 7 (expression_list -> expression SEMICOLON expression_list .)
+    ENDFOR          reduce using rule 7 (expression_list -> expression SEMICOLON expression_list .)
+
+
+state 23
+
+    (16) string_expression -> string_expression POINT . string_expression
+    (14) string_expression -> . string
+    (15) string_expression -> . variable
+    (16) string_expression -> . string_expression POINT string_expression
+    (21) string -> . STR
+    (20) variable -> . VARIABLE
+
+    STR             shift and go to state 18
+    VARIABLE        shift and go to state 19
+
+    string_expression              shift and go to state 28
+    string                         shift and go to state 16
+    variable                       shift and go to state 17
+
+state 24
+
+    (10) expression -> FOR VARIABLE IN . variable DO expression_list ENDFOR
+    (11) expression -> FOR VARIABLE IN . string_list DO expression_list ENDFOR
+    (20) variable -> . VARIABLE
+    (17) string_list -> . LPAREN string_list_interior RPAREN
+
+    VARIABLE        shift and go to state 19
+    LPAREN          shift and go to state 27
+
+    variable                       shift and go to state 29
+    string_list                    shift and go to state 30
+
+state 25
+
+    (12) expression -> VARIABLE AFFECT string_expression .
+    (16) string_expression -> string_expression . POINT string_expression
+
+    SEMICOLON       reduce using rule 12 (expression -> VARIABLE AFFECT string_expression .)
+    POINT           shift and go to state 23
+
+
+state 26
+
+    (13) expression -> VARIABLE AFFECT string_list .
+
+    SEMICOLON       reduce using rule 13 (expression -> VARIABLE AFFECT string_list .)
+
+
+state 27
+
+    (17) string_list -> LPAREN . string_list_interior RPAREN
+    (18) string_list_interior -> . string COMA string_list_interior
+    (19) string_list_interior -> . string
+    (21) string -> . STR
+
+    STR             shift and go to state 18
+
+    string_list_interior           shift and go to state 31
+    string                         shift and go to state 32
+
+state 28
+
+    (16) string_expression -> string_expression POINT string_expression .
+    (16) string_expression -> string_expression . POINT string_expression
+
+    POINT           reduce using rule 16 (string_expression -> string_expression POINT string_expression .)
+    SEMICOLON       reduce using rule 16 (string_expression -> string_expression POINT string_expression .)
+
+  ! POINT           [ shift and go to state 23 ]
+
+
+state 29
+
+    (10) expression -> FOR VARIABLE IN variable . DO expression_list ENDFOR
+
+    DO              shift and go to state 33
+
+
+state 30
+
+    (11) expression -> FOR VARIABLE IN string_list . DO expression_list ENDFOR
+
+    DO              shift and go to state 34
+
+
+state 31
+
+    (17) string_list -> LPAREN string_list_interior . RPAREN
+
+    RPAREN          shift and go to state 35
+
+
+state 32
+
+    (18) string_list_interior -> string . COMA string_list_interior
+    (19) string_list_interior -> string .
+
+    COMA            shift and go to state 36
+    RPAREN          reduce using rule 19 (string_list_interior -> string .)
+
+
+state 33
+
+    (10) expression -> FOR VARIABLE IN variable DO . expression_list ENDFOR
+    (7) expression_list -> . expression SEMICOLON expression_list
+    (8) expression_list -> . expression SEMICOLON
+    (9) expression -> . PRINT string_expression
+    (10) expression -> . FOR VARIABLE IN variable DO expression_list ENDFOR
+    (11) expression -> . FOR VARIABLE IN string_list DO expression_list ENDFOR
+    (12) expression -> . VARIABLE AFFECT string_expression
+    (13) expression -> . VARIABLE AFFECT string_list
+
+    PRINT           shift and go to state 10
+    FOR             shift and go to state 11
+    VARIABLE        shift and go to state 12
+
+    expression_list                shift and go to state 37
+    expression                     shift and go to state 9
+
+state 34
+
+    (11) expression -> FOR VARIABLE IN string_list DO . expression_list ENDFOR
+    (7) expression_list -> . expression SEMICOLON expression_list
+    (8) expression_list -> . expression SEMICOLON
+    (9) expression -> . PRINT string_expression
+    (10) expression -> . FOR VARIABLE IN variable DO expression_list ENDFOR
+    (11) expression -> . FOR VARIABLE IN string_list DO expression_list ENDFOR
+    (12) expression -> . VARIABLE AFFECT string_expression
+    (13) expression -> . VARIABLE AFFECT string_list
+
+    PRINT           shift and go to state 10
+    FOR             shift and go to state 11
+    VARIABLE        shift and go to state 12
+
+    expression_list                shift and go to state 38
+    expression                     shift and go to state 9
+
+state 35
+
+    (17) string_list -> LPAREN string_list_interior RPAREN .
+
+    SEMICOLON       reduce using rule 17 (string_list -> LPAREN string_list_interior RPAREN .)
+    DO              reduce using rule 17 (string_list -> LPAREN string_list_interior RPAREN .)
+
+
+state 36
+
+    (18) string_list_interior -> string COMA . string_list_interior
+    (18) string_list_interior -> . string COMA string_list_interior
+    (19) string_list_interior -> . string
+    (21) string -> . STR
+
+    STR             shift and go to state 18
+
+    string                         shift and go to state 32
+    string_list_interior           shift and go to state 39
+
+state 37
+
+    (10) expression -> FOR VARIABLE IN variable DO expression_list . ENDFOR
+
+    ENDFOR          shift and go to state 40
+
+
+state 38
+
+    (11) expression -> FOR VARIABLE IN string_list DO expression_list . ENDFOR
+
+    ENDFOR          shift and go to state 41
+
+
+state 39
+
+    (18) string_list_interior -> string COMA string_list_interior .
+
+    RPAREN          reduce using rule 18 (string_list_interior -> string COMA string_list_interior .)
+
+
+state 40
+
+    (10) expression -> FOR VARIABLE IN variable DO expression_list ENDFOR .
+
+    SEMICOLON       reduce using rule 10 (expression -> FOR VARIABLE IN variable DO expression_list ENDFOR .)
+
+
+state 41
+
+    (11) expression -> FOR VARIABLE IN string_list DO expression_list ENDFOR .
+
+    SEMICOLON       reduce using rule 11 (expression -> FOR VARIABLE IN string_list DO expression_list ENDFOR .)
+

@@ -1,4 +1,3 @@
 {{
-nom := 'De Pril';
-prenom := 'Julie';
+aa
 }}

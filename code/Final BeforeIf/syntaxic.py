@@ -3,7 +3,7 @@ import ply.lex as lex
 import ply.yacc as yacc
 from lexical import tokens
 from lexical import usednames
-
+from abc import ABC, abstractmethod
 
 operations = {
         '+' : lambda x, y : x+y,
@@ -28,7 +28,35 @@ precedence = (
         ('right', 'COMPARE'),
         )
 
-class VariableNode:
+def execute(inputt):
+    if(isinstance(inputt,ExecNode)):
+        return inputt.execute()
+    elif(isinstance(inputt,str)):
+        return inputt
+    else:
+        message="Object "+str(inputt)+" "+str(type(inputt))+" here. (should be str or ExecNode)"
+        raise Exception(message)
+
+class ExecNode(ABC):
+    @abstractmethod
+    def execute(self):
+        pass
+    
+class PrintingNode(ABC):
+    pass
+
+#Inutile actuellement, a supprimer
+class ThingNode(ExecNode):
+    def __init__(self,el):
+        self.el=el
+        
+    def execute(self):
+        return self.el
+    
+    def __str__(self):
+        return "[THING:"+str(self.el)+"]"
+
+class VariableNode(ExecNode):
     def __init__(self,v):
         self.v=v
     
@@ -42,20 +70,20 @@ class VariableNode:
         return "VARIABLE:"+str(self.v)
     
     
-class AffectationNode:
+class AffectationNode(ExecNode):
     def __init__(self,v,el):
         self.v=v
         self.el=el
 
     def execute(self):
-            usednames[self.v] = self.el.execute()
-            return '' 
+        usednames[self.v]=execute(self.el)
+        return '' 
 
     def __str__(self):
         return "AFFECT:"+str(self.v)+":="+str(self.el)
     
     
-class OperationNode:
+class OperationNode(ExecNode):
     def __init__(self,oper,e_1=None,e_2=None):
         self.oper=oper
         self.e_1=e_1
@@ -63,25 +91,25 @@ class OperationNode:
 
     def execute(self):
         try:
-            return operations[self.oper](self.e_1.execute(),self.e_2.execute()) 
+            return operations[self.oper](execute(self.e_1),execute(self.e_2)) 
         except:
-            raise Exception("Error with this operation:",self.e_l,self.oper,self.e_r,".")
+            raise Exception("Error with this operation: ",self.e_l,self.oper,self.e_r,".")
                 
     def __str__(self):
         return "OPERATION:"+str(self.e_1)+str(self.oper)+str(self.e_2)
 
-class ConcatNode:
+class ConcatNode(ExecNode):
     def __init__(self,e_1,e_2):
         self.e_1=e_1
         self.e_2=e_2
     
     def execute(self):
-        return str(self.e_1.execute()) + str(self.e_2.execute())
+        return str(execute(self.e_1))+str(execute(self.e_2))
     
     def __str__(self):
-        return "CONCAT:<"+str(self.left)+">,<" + str(self.right)+">"
+        return "CONCAT:<"+str(self.e_1)+">,<" + str(self.e_2)+">"
     
-class ListNode:
+class ListNode(ExecNode):
     def __init__(self,el):
         self.el=el
         
@@ -91,18 +119,40 @@ class ListNode:
     def __str__(self):
         return "LIST:"+str(self.el)
     
-class PrintNode:
+class PrintNode(ExecNode,PrintingNode):
     def __init__(self,el):
         self.el=el
         
     def execute(self):
-        print(self.el)
-        return self.el
+        return execute(self.el)
     
     def __str__(self):
         return "PRINT:"+str(self.el)
     
-
+ 
+class ForNode(ExecNode,PrintingNode):
+    def __init__(self,i,listelem,expressionlist):
+        self.i=i
+        self.listelem=listelem
+        self.expressionlist=expressionlist
+    
+    def execute(self):
+        toPrint=""
+        beforeFor=None
+        if(self.i in usednames): #Si jamais la variable d'itération existe en dehors du for
+            beforeFor=usednames[self.i] 
+        for elem in execute(self.listelem):        #Pour chaque element de l'iterateur
+            usednames[self.i] = execute(elem)
+            for expression in self.expressionlist: #Pour chaque truc à faire dans le for
+                if(isinstance(expression,PrintingNode)):
+                    toPrint=toPrint+execute(expression)
+                else:
+                    execute(expression)
+        usednames[self.i]=beforeFor
+        return toPrint
+    
+    def __str__(self):
+        return "FOR["+self.i+"]in["+self.listelem+"]do["+self.expressionlist+"]"
             
 
 
@@ -130,12 +180,17 @@ def p_dumbo_block(p):
     '''dumbo_bloc : BLOCKstart expression_list BLOCKend'''
     result=""
     for elem in p[2]:
-        result=result+elem.execute()
+       # print("Objet:",elem," de type: ",type(elem))
+       #print("       -> ",elem)
+       result=result+execute(elem)
+       # print("ok \n")
     p[0]=result
 
 def p_expression_list_exprl(p):
     '''expression_list : expression SEMICOLON expression_list'''
-    p[0]=[p[1],p[3]]
+    #p[0]=[p[1],p[3]]
+    p[0]=[p[1]]
+    p[0].extend(p[3])
     
 def p_expression_list(p):
     '''expression_list : expression SEMICOLON'''
@@ -147,15 +202,16 @@ def p_expression_print(p):
     #print(p[2])
     #p[0]=p[2]
     
+"""    
 def p_expression_forstr(p):
     '''expression : FOR VARIABLE IN string_list DO expression_list ENDFOR'''
-    p[0]=p[2]
-    #FOR IMPLEMENTATION    
+    #p[0] = ForNode(p[2], Variable(p[4]), p[6]) 
+"""
     
-def p_expression_forvar(p):
-    '''expression : FOR VARIABLE IN VARIABLE DO expression_list ENDFOR'''
-    #FOR IMPLEMENTATION
-    p[0]=p[2]
+def p_expression_for(p):   #Noter 'VARIABLE' et 'variable'
+    '''expression : FOR VARIABLE IN variable DO expression_list ENDFOR 
+    expression : FOR VARIABLE IN string_list DO expression_list ENDFOR''' 
+    p[0]=ForNode(p[2],p[4],p[6])
     
 def p_expression_varstring(p):
     '''expression : VARIABLE AFFECT string_expression'''
@@ -167,7 +223,7 @@ def p_expression_varlist(p):
     
 def p_string_expression_string(p):
     '''string_expression : string'''
-    p[0]=str(p[1])
+    p[0]=p[1]
     
 def p_string_expression_var(p):
     '''string_expression : variable'''
@@ -179,15 +235,19 @@ def p_string_expression_strstr(p):
     
 def p_string_list(p):
     '''string_list : LPAREN string_list_interior RPAREN'''
-    p[0]=p[2]
+    p[0]=ListNode(p[2])
     
 def p_string_list_interior(p):
     '''string_list_interior : string COMA string_list_interior'''
-    p[0]=[p[1],p[3]]
+    if(isinstance(p[3],list)):
+        p[0]=[p[1]]
+        p[0].extend(p[3])
+    else:
+        p[0]=[p[1],p[3]]
     
 def p_string_list_interior_end(p):
     '''string_list_interior : string'''
-    p[0]=[str(p[1])]
+    p[0]=p[1]
     
 def p_variable(p):
     '''variable : VARIABLE'''
@@ -195,20 +255,23 @@ def p_variable(p):
     
 def p_string(p):
     '''string : STR'''
-    p[0]=p[1]
+    p[0]=str(p[1])
+
 
 def p_error(p):
-    print("Syntax error : " + str(p.value) + " not expected "+"at line"+str(p.lineno))
+    print("Syntax error: "+str(p.value)+"  line: "+str(p.lineno))
     #print("Syntax error line",p.value)
 
 
 currentFile=""
 
 def doTheJob(data,template,output):
+    print("yo")
+"""
     global currentFile
     currentFile="Data"
     parser.parse(data.read(), debug=False)
-"""
+ 
     currentFile="Template"
     result=parser.parse(template.read(), debug=False)
     outputfile=output
@@ -219,11 +282,23 @@ def doTheJob(data,template,output):
 parser=yacc.yacc()
 
 if __name__ == "__main__":
-    if len(sys.argv)==4:
-        data = open(sys.argv[1], 'r')
-        template = open(sys.argv[2], 'r')
-        output = open(sys.argv[3] ,'w')
-        doTheJob(data,template,output)
+    print("\n")
+    datass=open(sys.argv[1], 'r')
+    datass=datass.read()
+    result = yacc.parse(datass)
+    print(usednames)
+
+    template=open(sys.argv[2], 'r')
+    template=template.read()
+    result = yacc.parse(template)
+    print("   - - -")
+    print("result: \n",result)
+
+    #if len(sys.argv)==4:
+        #data = open(sys.argv[1], 'r')
+        #template = open(sys.argv[2], 'r')
+        #output = open(sys.argv[3] ,'w')
+        #doTheJob(data,template,output)
 
 """
 if __name__ == "__main__":

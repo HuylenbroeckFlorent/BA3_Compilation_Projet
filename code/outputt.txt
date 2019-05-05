@@ -1,0 +1,6 @@
+{{
+nom := 'De Pril';
+prenom := 'Julie';
+}}<htlm>
+  <head><title>{{ print nom.' '.prenom; }}</title></head>
+</html>

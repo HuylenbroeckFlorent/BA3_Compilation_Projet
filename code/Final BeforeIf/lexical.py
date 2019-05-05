@@ -22,9 +22,9 @@ tokens = (
         #, 'newline'
          )
 
-t_ADD_OP = r'\+|-'
-t_MUL_OP = r'\*|/'
-t_COMA = r','
+t_BLOCK_ADD_OP = r'\+|-'
+t_BLOCK_MUL_OP = r'\*|/'
+#t_COMA = r','
 t_BLOCK_COMA = r','
 
 #t_BLOCK_BOOL = r'true|false'
@@ -132,7 +132,6 @@ def t_BLOCK_newline(t):
 def t_BLOCK_APOSTROPHE(t):
     r'\''
     t.lexer.begin('STRING')
-    return t
 
 def t_STRING_APOSTROPHE(t):
     r'\''
@@ -144,10 +143,12 @@ def t_STRING_STR(t):
 
 def t_newline(t):
     r'\n+'
-    t.lexer.lineno =+ len(t.value)   
+    t.lexer.lineno += len(t.value)   
 
 def t_TXT(t):
     r'[^({{)]+'
+    #print("<<<<<<<<<<<< current:",t.lexer.lineno," + ",str(t.value).count("\n"),">>>>>>>>>>>>>")
+    t.lexer.lineno += str(t.value).count("\n")
     return t
 
 def t_STRING_error(t):
