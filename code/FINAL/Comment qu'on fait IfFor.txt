@@ -1,0 +1,15 @@
+Afin de pouvoir gérer efficacement le FOR et le IF, il nous semblait nécessaire d’avoir un grand contrôle sur l’ordre d’exécution (exécuter les commandes une à une dans l’ordre de parsing n’était plus possible), ainsi que sur la gestion des modifications de variables et conditions booléennes qui en découlent.
+Nous avons dont introduit la notion d’ « ExecNode ». Un ExecNode est un objet décrivant une partie de l’exécution du programme possédant diverses implémentations, c’est-à-dire d’une part la description de cette exécution via une méthode execute() que chaque ExecNode présente, ainsi que toute les données nécessaire à cette exécution.
+AffectationNode par exemple décrit la modification (ou création) d’une variable et comportera, en attendant son exécution, le nom de cette variable ainsi que la valeur à stocker dans cette variable. Cette valeur en question peut être soit directement donnée (un string, un integer, un boolean) soit indirecte (une autre variable stockée sous la forme d’un VariableNode attendant lui-même d’être exécuté quand l’AffectationNode sera exécuté afin de s’assurer de renvoyer la bonne valeur au bon moment, le résultat d’une opération stocké sous la forme d’un OperationNode,…).
+L’ordre d’exécution est donc totalement contrôlé. Notons au passage que tout n’est pas stocké via escalade d’ExecNode, les constantes tout particulièrement ne nécessitent pas de telles précaution. Afin d’uniformiser le code, une fonction globale execute(p) exécutera p si il s’agit d’un ExecNode, et renverra tout simplement p sinon.
+Pour revenir sur les cas de FOR et de IF :
+    =>	ForNode retient comme information le nom de la variable interne au for, les (ou la) éléments sur lesquelles itérer (potentiellement un autre ExecNode de variable) ainsi que le corps de la boucle (probablement un ou une liste d’ExecNode d’affectation, d’opération,…). (Le ‘i’, ‘tab’ et ‘corps’ de FOR i IN tab DO corps)
+Lorsqu’il sera executé, le ForNode créera une variable du nom concerné (‘i’) et bouclera ensuite
+    -Affectation à cette variable d’un des éléments sur lesquels intérer (ceux de ‘tab’)
+    -Exécution du corps de la boucle (‘corps’)
+Notons par ailleurs que si le nom de variable (‘i’) est déjà pris, celui si sera override durant l’exécution de la boucle mais rétablit à sa valeur initiale au moment de la sortie du for
+    =>	IfNode retient comme information sa condition (probablement un autre ExecNode, même si simplement ‘true’ est également valide) ainsi que le corps du IF (encore une foi, un ou une liste d’ExecNode). 
+Lorsqu’il sera executé, le IfNode lancera l’exécution de sa condition et, si celle si est vrai, lancera par la suite l’exécution de chaque élément composant son corps (et rien sinon)
+
+
+

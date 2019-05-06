@@ -1,5 +1,4 @@
 import ply.lex as lex
-import queue
 
 npar = 0
 
@@ -14,7 +13,7 @@ states = (
 tokens = (
         'TXT',
         'BLOCKstart', 'BLOCKend', 
-        'BOOL', 'ANDOR', 'PRINT', 'ELSE', 'FOR', 'IN', 'ENDFOR', 'DO', 'IF', 'ENDIF',
+        'BOOL', 'ANDOR', 'PRINT', 'FOR', 'IN', 'ENDFOR', 'DO', 'IF', 'ENDIF',
         'AFFECT', 'VARIABLE', 'SEMICOLON', 'COMA', 'LPAREN', 'RPAREN', 'APOSTROPHE', 'STR',
         'INT_OP', 'COMPARE', 'POINT','INT'
          )
@@ -69,10 +68,6 @@ def t_BLOCK_ANDOR(t):
 
 def t_BLOCK_PRINT(t):
     r'print'
-    return t
-
-def t_BLOCK_ELSE(t):
-    r'else'
     return t
 
 def t_BLOCK_FOR(t):

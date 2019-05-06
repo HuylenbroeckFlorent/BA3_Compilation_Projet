@@ -1,0 +1,6 @@
+{{
+nom := 'De Kerel';
+prenom := 'Joh';
+cours := ('Logique 1', 'Logique 2', 'Algebre 1', 'Math elem', 'Philosophie analytique');
+dernier_elem_list := 4;
+}}

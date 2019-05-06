@@ -1,0 +1,67 @@
+Voici une description de la grammaire de dumbo utilisant ses lexèmes.
+En effet, nous avons jugé une telle description plus claire (plutôt que de tout intégrer dans un unique grand ensemble de règles de grammaire), et ce tout particulièrement étant donné la notion d’états des lexèmes. Une telle description est également plus représentative de la manière de fonctionner de dumbo.
+
+
+        PARTIE LEXICALE
+
+-- État "INITIAL" --
+TXT -> [^({{)]+
+BLOCKstart -> {{    =>vers l'état "BLOCK"
+
+-- État "BLOCK" --
+IF -> if
+ENDIF -> endif
+COMPARE -> <=|>=|<|>|!=|=
+LPAREN -> (
+RPAREN -> )
+INT -> [0-9]+
+BOOL -> true|false
+ANDOR -> and|or
+PRINT -> print
+FOR -> for 
+ENDFOR -> endfor
+IN -> in
+DO -> do
+BLOCKend -> }}      =>vers l'état "INITIAL"
+AFFECT -> :=
+VARIABLE -> [a-zA-Z0-9_]+
+SEMICOLON -> ;
+APOSTROPHE -> '     =>vers l'état "STRING"
+
+-- État "STRING" --
+APOSTROPHE -> '     =>vers l'état "BLOCK"
+STR -> [^']+
+
+
+
+        PARTIE SYNTAXIQUE
+
+programme -> txt
+programme -> txt programme
+programme -> dumbo_bloc
+programme -> dumbo_bloc programme
+txt -> TXT
+dumbo_bloc -> BLOCKstart expression_list BLOCKend
+expression_list -> expression SEMICOLON expression_list
+expression_list -> expression SEMICOLON
+expression -> PRINT value_expression
+expression -> FOR VARIABLE IN variable DO expression_list ENDFOR
+expression -> FOR VARIABLE IN string_list DO expression_list ENDFOR
+expression -> IF boolean DO expression_list ENDIF
+expression -> VARIABLE AFFECT value_expression
+expression -> VARIABLE AFFECT string_list
+value_expression -> string
+value_expression -> integer
+value_expression -> boolean
+value_expression -> variable
+value_expression -> value_expression POINT value_expression
+boolean -> value_expression ANDOR value_expression
+boolean -> value_expression COMPARE value_expression
+string_list -> LPAREN string_list_interior RPAREN
+string_list_interior -> string COMA string_list_interior
+string_list_interior -> string
+variable -> VARIABLE
+string -> STR
+integer -> value_expression INT_OP value_expression
+integer -> INT
+boolean -> BOOL

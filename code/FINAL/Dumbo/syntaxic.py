@@ -212,7 +212,7 @@ def p_expression_list(p):
     p[0]=[p[1]]
     
 def p_expression_print(p):
-    '''expression : PRINT string_expression'''
+    '''expression : PRINT value_expression'''
     p[0]=PrintNode(p[2])
     
 def p_expression_for(p):   #Noter la diff 'VARIABLE' et 'variable'
@@ -226,27 +226,27 @@ def p_if(p):
     
     
 def p_expression_varstring(p):
-    '''expression : VARIABLE AFFECT string_expression
+    '''expression : VARIABLE AFFECT value_expression
     expression : VARIABLE AFFECT string_list'''
     p[0]=AffectationNode(p[1],p[3]) 
     
-def p_string_expression_string(p):
-    '''string_expression : string
-    string_expression : integer
-    string_expression : boolean'''
+def p_value_expression_string(p):
+    '''value_expression : string
+    value_expression : integer
+    value_expression : boolean'''
     p[0]=p[1]    
     
-def p_string_expression_var(p):
-    '''string_expression : variable'''
+def p_value_expression_var(p):
+    '''value_expression : variable'''
     p[0]=p[1] 
     
-def p_string_expression_strstr(p):
-    '''string_expression : string_expression POINT string_expression''' 
+def p_value_expression_strstr(p):
+    '''value_expression : value_expression POINT value_expression''' 
     p[0]=ConcatNode(p[1],p[3])
 
 def p_boolean_andorresult(p):
-    '''boolean : string_expression ANDOR string_expression
-    boolean : string_expression COMPARE string_expression'''
+    '''boolean : value_expression ANDOR value_expression
+    boolean : value_expression COMPARE value_expression'''
     p[0]=OperationNode(p[1],p[2],p[3])     
     
 def p_string_list(p):
@@ -274,7 +274,7 @@ def p_string(p):
     p[0]=str(p[1])
 
 def p_int_operation(p): #RENAME
-    '''integer : string_expression INT_OP string_expression'''
+    '''integer : value_expression INT_OP value_expression'''
     p[0]=OperationNode(p[1],p[2],p[3])      
 
 def p_int(p):
@@ -301,4 +301,4 @@ def doTheJob(data,template,output):
     outputfile.close()
 
 
-parser=yacc.yacc()
+parser=yacc.yacc(outputdir='Generated')

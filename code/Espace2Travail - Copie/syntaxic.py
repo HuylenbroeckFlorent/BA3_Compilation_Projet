@@ -28,6 +28,7 @@ precedence = (
         )
 
 def execute(inputt):
+    #print(str(inputt),type(inputt),"@",usednames)
     if(isinstance(inputt,ExecNode)):
         return inputt.execute()
     elif(isinstance(inputt,str) or isinstance(inputt,int) or isinstance(inputt,bool)):
@@ -62,7 +63,7 @@ class VariableNode(ExecNode):
     def execute(self):
         if(usednames[self.v] is None):
             message="Variable "+str(self.v)+" has no value"
-            raise Exception(str(message))
+            raise Exception(message)
         else:
             return usednames[self.v]
             
@@ -72,6 +73,7 @@ class VariableNode(ExecNode):
     
 class AffectationNode(ExecNode):
     def __init__(self,v,el):
+        #print("    Affect-> ",v," := ",el, "(type: ",type(el),")")
         self.v=v
         self.el=el
         
@@ -145,7 +147,7 @@ class ForNode(ExecNode,PrintingNode):
             beforeFor=usednames[self.i] 
         for elem in execute(self.listelem):        #Pour chaque element de l'iterateur
             usednames[self.i] = execute(elem)
-            for expression in self.expressionlist: #Pour chaque truc à faire dans le corps du for
+            for expression in self.expressionlist: #Pour chaque truc à faire dans le for
                 if(isinstance(expression,PrintingNode)):
                     toPrint=toPrint+execute(expression)
                 else:
@@ -155,24 +157,7 @@ class ForNode(ExecNode,PrintingNode):
     
     def __str__(self):
         return "FOR["+str(self.i)+"]in["+str(self.listelem)+"]do["+str(self.expressionlist)+"]"
-    
-class IfNode(ExecNode,PrintingNode):
-    def __init__(self,condition,expressionlist):
-        self.condition=condition
-        self.expressionlist=expressionlist
-        
-    def execute(self):
-        toPrint=""
-        if(execute(self.condition)):
-            for expression in self.expressionlist:
-                if(isinstance(expression,PrintingNode)):
-                    toPrint=toPrint+execute(expression)
-                else:
-                    execute(expression)
-        return toPrint
-                
-    def __str__(self):
-        return "IF["+str(self.condition)+"]do["+str(self.expressionlist)+"]"
+            
 
 
 def p_programme_txt(p):
@@ -199,11 +184,15 @@ def p_dumbo_block(p):
     '''dumbo_bloc : BLOCKstart expression_list BLOCKend'''
     result=""
     for elem in p[2]:
+       # print("Objet:",elem," de type: ",type(elem))
+       #print("       -> ",elem)
        result=result+execute(elem)
+       # print("ok \n")
     p[0]=result
 
 def p_expression_list_exprl(p):
     '''expression_list : expression SEMICOLON expression_list'''
+    #p[0]=[p[1],p[3]]
     p[0]=[p[1]]
     p[0].extend(p[3])
     
@@ -214,21 +203,31 @@ def p_expression_list(p):
 def p_expression_print(p):
     '''expression : PRINT string_expression'''
     p[0]=PrintNode(p[2])
+    #print(p[2])
+    #p[0]=p[2]
     
-def p_expression_for(p):   #Noter la diff 'VARIABLE' et 'variable'
+"""    
+def p_expression_forstr(p):
+    '''expression : FOR VARIABLE IN string_list DO expression_list ENDFOR'''
+    #p[0] = ForNode(p[2], Variable(p[4]), p[6]) 
+"""
+    
+def p_expression_for(p):   #Noter 'VARIABLE' et 'variable'
     '''expression : FOR VARIABLE IN variable DO expression_list ENDFOR 
     expression : FOR VARIABLE IN string_list DO expression_list ENDFOR'''   
     p[0]=ForNode(p[2],p[4],p[6])
     
-def p_if(p):
-    '''expression : IF boolean DO expression_list ENDIF'''
-    p[0]=IfNode(p[2],p[4])
-    
-    
 def p_expression_varstring(p):
     '''expression : VARIABLE AFFECT string_expression
     expression : VARIABLE AFFECT string_list'''
-    p[0]=AffectationNode(p[1],p[3]) 
+    print("WELL")
+    p[0]=AffectationNode(p[1],p[3])  #Assignement p[0]=("p[1]=p[3]")
+
+"""    
+def p_expression_varlist(p):
+    '''expression : VARIABLE AFFECT string_list'''
+    p[0]=AffectationNode(p[1],p[3])
+"""   
     
 def p_string_expression_string(p):
     '''string_expression : string
@@ -238,16 +237,18 @@ def p_string_expression_string(p):
     
 def p_string_expression_var(p):
     '''string_expression : variable'''
-    p[0]=p[1] 
+    p[0]=p[1] #VARIABLE
     
 def p_string_expression_strstr(p):
     '''string_expression : string_expression POINT string_expression''' 
     p[0]=ConcatNode(p[1],p[3])
 
 def p_boolean_andorresult(p):
-    '''boolean : string_expression ANDOR string_expression
-    boolean : string_expression COMPARE string_expression'''
-    p[0]=OperationNode(p[1],p[2],p[3])     
+    '''boolean : string_expression ANDOR string_expression'''
+    print("YOYOYOYOY")
+    print(p[1],p[2],p[3])
+    p[0]=OperationNode(p[1],p[2],p[3])   
+    
     
 def p_string_list(p):
     '''string_list : LPAREN string_list_interior RPAREN'''
@@ -283,22 +284,65 @@ def p_int(p):
     
 def p_bool(p):
     '''boolean : BOOL'''
-    p[0]=bool(p[1]) 
+    p[0]=bool(p[1])
+    
+
 
 def p_error(p):
     print("Syntax error: "+str(p.value)+"  line: "+str(p.lineno))
+    #print("Syntax error line",p.value)
+
+
+currentFile=""
 
 def doTheJob(data,template,output):
-    data=data.read()
-    result = yacc.parse(data)
-    print("\n",usednames)
-    template=template.read()
-    result = yacc.parse(template)
-    print("result: \n \n",result,"\n")
-    print(usednames)
+    print("yo")
+"""
+    global currentFile
+    currentFile="Data"
+    parser.parse(data.read(), debug=False)
+ 
+    currentFile="Template"
+    result=parser.parse(template.read(), debug=False)
     outputfile=output
     outputfile.write(str(result))
     outputfile.close()
-
+"""
 
 parser=yacc.yacc()
+
+if __name__ == "__main__":
+    print("\n")
+    datass=open(sys.argv[1], 'r')
+    datass=datass.read()
+    result = yacc.parse(datass)
+    print(usednames)
+    print("\n \n        <><><> Parsing <><><> ")
+    template=open(sys.argv[2], 'r')
+    template=template.read()
+    result = yacc.parse(template)
+    print("result: \n \n",result)
+    print(usednames)
+
+    #if len(sys.argv)==4:
+        #data = open(sys.argv[1], 'r')
+        #template = open(sys.argv[2], 'r')
+        #output = open(sys.argv[3] ,'w')
+        #doTheJob(data,template,output)
+
+"""
+if __name__ == "__main__":
+    import sys
+    lexer = lex.lex()
+    for token in lexer:
+        print("line %d : %s (%s) " % (token.lineno, token.type, token.value))
+"""
+    
+    
+""" #yacc.yacc(outputdir='generated') 
+if __name__ == '__main__':
+    import sys
+    input = open(sys.stdin.read(),'r')
+    result = yacc.parse(input)
+    print(result)
+"""

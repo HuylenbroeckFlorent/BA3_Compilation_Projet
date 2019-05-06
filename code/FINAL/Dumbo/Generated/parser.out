@@ -2,7 +2,6 @@ Created by PLY version 3.10 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    ELSE
     APOSTROPHE
 
 Grammar
@@ -16,25 +15,25 @@ Rule 5     txt -> TXT
 Rule 6     dumbo_bloc -> BLOCKstart expression_list BLOCKend
 Rule 7     expression_list -> expression SEMICOLON expression_list
 Rule 8     expression_list -> expression SEMICOLON
-Rule 9     expression -> PRINT string_expression
+Rule 9     expression -> PRINT value_expression
 Rule 10    expression -> FOR VARIABLE IN variable DO expression_list ENDFOR
 Rule 11    expression -> FOR VARIABLE IN string_list DO expression_list ENDFOR
 Rule 12    expression -> IF boolean DO expression_list ENDIF
-Rule 13    expression -> VARIABLE AFFECT string_expression
+Rule 13    expression -> VARIABLE AFFECT value_expression
 Rule 14    expression -> VARIABLE AFFECT string_list
-Rule 15    string_expression -> string
-Rule 16    string_expression -> integer
-Rule 17    string_expression -> boolean
-Rule 18    string_expression -> variable
-Rule 19    string_expression -> string_expression POINT string_expression
-Rule 20    boolean -> string_expression ANDOR string_expression
-Rule 21    boolean -> string_expression COMPARE string_expression
+Rule 15    value_expression -> string
+Rule 16    value_expression -> integer
+Rule 17    value_expression -> boolean
+Rule 18    value_expression -> variable
+Rule 19    value_expression -> value_expression POINT value_expression
+Rule 20    boolean -> value_expression ANDOR value_expression
+Rule 21    boolean -> value_expression COMPARE value_expression
 Rule 22    string_list -> LPAREN string_list_interior RPAREN
 Rule 23    string_list_interior -> string COMA string_list_interior
 Rule 24    string_list_interior -> string
 Rule 25    variable -> VARIABLE
 Rule 26    string -> STR
-Rule 27    integer -> string_expression INT_OP string_expression
+Rule 27    integer -> value_expression INT_OP value_expression
 Rule 28    integer -> INT
 Rule 29    boolean -> BOOL
 
@@ -49,7 +48,6 @@ BOOL                 : 29
 COMA                 : 23
 COMPARE              : 21
 DO                   : 10 11 12
-ELSE                 : 
 ENDFOR               : 10 11
 ENDIF                : 12
 FOR                  : 10 11
@@ -76,10 +74,10 @@ expression_list      : 6 7 10 11 12
 integer              : 16
 programme            : 2 4 0
 string               : 15 23 24
-string_expression    : 9 13 19 19 20 20 21 21 27 27
 string_list          : 11 14
 string_list_interior : 22 23
 txt                  : 1 2
+value_expression     : 9 13 19 19 20 20 21 21 27 27
 variable             : 10 18
 
 Parsing method: LALR
@@ -159,11 +157,11 @@ state 5
     (6) dumbo_bloc -> BLOCKstart . expression_list BLOCKend
     (7) expression_list -> . expression SEMICOLON expression_list
     (8) expression_list -> . expression SEMICOLON
-    (9) expression -> . PRINT string_expression
+    (9) expression -> . PRINT value_expression
     (10) expression -> . FOR VARIABLE IN variable DO expression_list ENDFOR
     (11) expression -> . FOR VARIABLE IN string_list DO expression_list ENDFOR
     (12) expression -> . IF boolean DO expression_list ENDIF
-    (13) expression -> . VARIABLE AFFECT string_expression
+    (13) expression -> . VARIABLE AFFECT value_expression
     (14) expression -> . VARIABLE AFFECT string_list
 
     PRINT           shift and go to state 10
@@ -205,17 +203,17 @@ state 9
 
 state 10
 
-    (9) expression -> PRINT . string_expression
-    (15) string_expression -> . string
-    (16) string_expression -> . integer
-    (17) string_expression -> . boolean
-    (18) string_expression -> . variable
-    (19) string_expression -> . string_expression POINT string_expression
+    (9) expression -> PRINT . value_expression
+    (15) value_expression -> . string
+    (16) value_expression -> . integer
+    (17) value_expression -> . boolean
+    (18) value_expression -> . variable
+    (19) value_expression -> . value_expression POINT value_expression
     (26) string -> . STR
-    (27) integer -> . string_expression INT_OP string_expression
+    (27) integer -> . value_expression INT_OP value_expression
     (28) integer -> . INT
-    (20) boolean -> . string_expression ANDOR string_expression
-    (21) boolean -> . string_expression COMPARE string_expression
+    (20) boolean -> . value_expression ANDOR value_expression
+    (21) boolean -> . value_expression COMPARE value_expression
     (29) boolean -> . BOOL
     (25) variable -> . VARIABLE
 
@@ -224,7 +222,7 @@ state 10
     BOOL            shift and go to state 23
     VARIABLE        shift and go to state 24
 
-    string_expression              shift and go to state 16
+    value_expression               shift and go to state 16
     string                         shift and go to state 17
     integer                        shift and go to state 18
     boolean                        shift and go to state 19
@@ -240,7 +238,7 @@ state 11
 
 state 12
 
-    (13) expression -> VARIABLE . AFFECT string_expression
+    (13) expression -> VARIABLE . AFFECT value_expression
     (14) expression -> VARIABLE . AFFECT string_list
 
     AFFECT          shift and go to state 26
@@ -249,16 +247,16 @@ state 12
 state 13
 
     (12) expression -> IF . boolean DO expression_list ENDIF
-    (20) boolean -> . string_expression ANDOR string_expression
-    (21) boolean -> . string_expression COMPARE string_expression
+    (20) boolean -> . value_expression ANDOR value_expression
+    (21) boolean -> . value_expression COMPARE value_expression
     (29) boolean -> . BOOL
-    (15) string_expression -> . string
-    (16) string_expression -> . integer
-    (17) string_expression -> . boolean
-    (18) string_expression -> . variable
-    (19) string_expression -> . string_expression POINT string_expression
+    (15) value_expression -> . string
+    (16) value_expression -> . integer
+    (17) value_expression -> . boolean
+    (18) value_expression -> . variable
+    (19) value_expression -> . value_expression POINT value_expression
     (26) string -> . STR
-    (27) integer -> . string_expression INT_OP string_expression
+    (27) integer -> . value_expression INT_OP value_expression
     (28) integer -> . INT
     (25) variable -> . VARIABLE
 
@@ -268,7 +266,7 @@ state 13
     VARIABLE        shift and go to state 24
 
     boolean                        shift and go to state 27
-    string_expression              shift and go to state 28
+    value_expression               shift and go to state 28
     string                         shift and go to state 17
     integer                        shift and go to state 18
     variable                       shift and go to state 20
@@ -288,11 +286,11 @@ state 15
     (8) expression_list -> expression SEMICOLON .
     (7) expression_list -> . expression SEMICOLON expression_list
     (8) expression_list -> . expression SEMICOLON
-    (9) expression -> . PRINT string_expression
+    (9) expression -> . PRINT value_expression
     (10) expression -> . FOR VARIABLE IN variable DO expression_list ENDFOR
     (11) expression -> . FOR VARIABLE IN string_list DO expression_list ENDFOR
     (12) expression -> . IF boolean DO expression_list ENDIF
-    (13) expression -> . VARIABLE AFFECT string_expression
+    (13) expression -> . VARIABLE AFFECT value_expression
     (14) expression -> . VARIABLE AFFECT string_list
 
     BLOCKend        reduce using rule 8 (expression_list -> expression SEMICOLON .)
@@ -308,13 +306,13 @@ state 15
 
 state 16
 
-    (9) expression -> PRINT string_expression .
-    (19) string_expression -> string_expression . POINT string_expression
-    (27) integer -> string_expression . INT_OP string_expression
-    (20) boolean -> string_expression . ANDOR string_expression
-    (21) boolean -> string_expression . COMPARE string_expression
+    (9) expression -> PRINT value_expression .
+    (19) value_expression -> value_expression . POINT value_expression
+    (27) integer -> value_expression . INT_OP value_expression
+    (20) boolean -> value_expression . ANDOR value_expression
+    (21) boolean -> value_expression . COMPARE value_expression
 
-    SEMICOLON       reduce using rule 9 (expression -> PRINT string_expression .)
+    SEMICOLON       reduce using rule 9 (expression -> PRINT value_expression .)
     POINT           shift and go to state 30
     INT_OP          shift and go to state 31
     ANDOR           shift and go to state 32
@@ -323,50 +321,50 @@ state 16
 
 state 17
 
-    (15) string_expression -> string .
+    (15) value_expression -> string .
 
-    POINT           reduce using rule 15 (string_expression -> string .)
-    INT_OP          reduce using rule 15 (string_expression -> string .)
-    ANDOR           reduce using rule 15 (string_expression -> string .)
-    COMPARE         reduce using rule 15 (string_expression -> string .)
-    SEMICOLON       reduce using rule 15 (string_expression -> string .)
-    DO              reduce using rule 15 (string_expression -> string .)
+    POINT           reduce using rule 15 (value_expression -> string .)
+    INT_OP          reduce using rule 15 (value_expression -> string .)
+    ANDOR           reduce using rule 15 (value_expression -> string .)
+    COMPARE         reduce using rule 15 (value_expression -> string .)
+    SEMICOLON       reduce using rule 15 (value_expression -> string .)
+    DO              reduce using rule 15 (value_expression -> string .)
 
 
 state 18
 
-    (16) string_expression -> integer .
+    (16) value_expression -> integer .
 
-    POINT           reduce using rule 16 (string_expression -> integer .)
-    INT_OP          reduce using rule 16 (string_expression -> integer .)
-    ANDOR           reduce using rule 16 (string_expression -> integer .)
-    COMPARE         reduce using rule 16 (string_expression -> integer .)
-    SEMICOLON       reduce using rule 16 (string_expression -> integer .)
-    DO              reduce using rule 16 (string_expression -> integer .)
+    POINT           reduce using rule 16 (value_expression -> integer .)
+    INT_OP          reduce using rule 16 (value_expression -> integer .)
+    ANDOR           reduce using rule 16 (value_expression -> integer .)
+    COMPARE         reduce using rule 16 (value_expression -> integer .)
+    SEMICOLON       reduce using rule 16 (value_expression -> integer .)
+    DO              reduce using rule 16 (value_expression -> integer .)
 
 
 state 19
 
-    (17) string_expression -> boolean .
+    (17) value_expression -> boolean .
 
-    POINT           reduce using rule 17 (string_expression -> boolean .)
-    INT_OP          reduce using rule 17 (string_expression -> boolean .)
-    ANDOR           reduce using rule 17 (string_expression -> boolean .)
-    COMPARE         reduce using rule 17 (string_expression -> boolean .)
-    SEMICOLON       reduce using rule 17 (string_expression -> boolean .)
-    DO              reduce using rule 17 (string_expression -> boolean .)
+    POINT           reduce using rule 17 (value_expression -> boolean .)
+    INT_OP          reduce using rule 17 (value_expression -> boolean .)
+    ANDOR           reduce using rule 17 (value_expression -> boolean .)
+    COMPARE         reduce using rule 17 (value_expression -> boolean .)
+    SEMICOLON       reduce using rule 17 (value_expression -> boolean .)
+    DO              reduce using rule 17 (value_expression -> boolean .)
 
 
 state 20
 
-    (18) string_expression -> variable .
+    (18) value_expression -> variable .
 
-    POINT           reduce using rule 18 (string_expression -> variable .)
-    INT_OP          reduce using rule 18 (string_expression -> variable .)
-    ANDOR           reduce using rule 18 (string_expression -> variable .)
-    COMPARE         reduce using rule 18 (string_expression -> variable .)
-    SEMICOLON       reduce using rule 18 (string_expression -> variable .)
-    DO              reduce using rule 18 (string_expression -> variable .)
+    POINT           reduce using rule 18 (value_expression -> variable .)
+    INT_OP          reduce using rule 18 (value_expression -> variable .)
+    ANDOR           reduce using rule 18 (value_expression -> variable .)
+    COMPARE         reduce using rule 18 (value_expression -> variable .)
+    SEMICOLON       reduce using rule 18 (value_expression -> variable .)
+    DO              reduce using rule 18 (value_expression -> variable .)
 
 
 state 21
@@ -429,19 +427,19 @@ state 25
 
 state 26
 
-    (13) expression -> VARIABLE AFFECT . string_expression
+    (13) expression -> VARIABLE AFFECT . value_expression
     (14) expression -> VARIABLE AFFECT . string_list
-    (15) string_expression -> . string
-    (16) string_expression -> . integer
-    (17) string_expression -> . boolean
-    (18) string_expression -> . variable
-    (19) string_expression -> . string_expression POINT string_expression
+    (15) value_expression -> . string
+    (16) value_expression -> . integer
+    (17) value_expression -> . boolean
+    (18) value_expression -> . variable
+    (19) value_expression -> . value_expression POINT value_expression
     (22) string_list -> . LPAREN string_list_interior RPAREN
     (26) string -> . STR
-    (27) integer -> . string_expression INT_OP string_expression
+    (27) integer -> . value_expression INT_OP value_expression
     (28) integer -> . INT
-    (20) boolean -> . string_expression ANDOR string_expression
-    (21) boolean -> . string_expression COMPARE string_expression
+    (20) boolean -> . value_expression ANDOR value_expression
+    (21) boolean -> . value_expression COMPARE value_expression
     (29) boolean -> . BOOL
     (25) variable -> . VARIABLE
 
@@ -451,7 +449,7 @@ state 26
     BOOL            shift and go to state 23
     VARIABLE        shift and go to state 24
 
-    string_expression              shift and go to state 35
+    value_expression               shift and go to state 35
     string_list                    shift and go to state 36
     string                         shift and go to state 17
     integer                        shift and go to state 18
@@ -461,21 +459,21 @@ state 26
 state 27
 
     (12) expression -> IF boolean . DO expression_list ENDIF
-    (17) string_expression -> boolean .
+    (17) value_expression -> boolean .
 
     DO              shift and go to state 38
-    ANDOR           reduce using rule 17 (string_expression -> boolean .)
-    COMPARE         reduce using rule 17 (string_expression -> boolean .)
-    POINT           reduce using rule 17 (string_expression -> boolean .)
-    INT_OP          reduce using rule 17 (string_expression -> boolean .)
+    ANDOR           reduce using rule 17 (value_expression -> boolean .)
+    COMPARE         reduce using rule 17 (value_expression -> boolean .)
+    POINT           reduce using rule 17 (value_expression -> boolean .)
+    INT_OP          reduce using rule 17 (value_expression -> boolean .)
 
 
 state 28
 
-    (20) boolean -> string_expression . ANDOR string_expression
-    (21) boolean -> string_expression . COMPARE string_expression
-    (19) string_expression -> string_expression . POINT string_expression
-    (27) integer -> string_expression . INT_OP string_expression
+    (20) boolean -> value_expression . ANDOR value_expression
+    (21) boolean -> value_expression . COMPARE value_expression
+    (19) value_expression -> value_expression . POINT value_expression
+    (27) integer -> value_expression . INT_OP value_expression
 
     ANDOR           shift and go to state 32
     COMPARE         shift and go to state 33
@@ -494,17 +492,17 @@ state 29
 
 state 30
 
-    (19) string_expression -> string_expression POINT . string_expression
-    (15) string_expression -> . string
-    (16) string_expression -> . integer
-    (17) string_expression -> . boolean
-    (18) string_expression -> . variable
-    (19) string_expression -> . string_expression POINT string_expression
+    (19) value_expression -> value_expression POINT . value_expression
+    (15) value_expression -> . string
+    (16) value_expression -> . integer
+    (17) value_expression -> . boolean
+    (18) value_expression -> . variable
+    (19) value_expression -> . value_expression POINT value_expression
     (26) string -> . STR
-    (27) integer -> . string_expression INT_OP string_expression
+    (27) integer -> . value_expression INT_OP value_expression
     (28) integer -> . INT
-    (20) boolean -> . string_expression ANDOR string_expression
-    (21) boolean -> . string_expression COMPARE string_expression
+    (20) boolean -> . value_expression ANDOR value_expression
+    (21) boolean -> . value_expression COMPARE value_expression
     (29) boolean -> . BOOL
     (25) variable -> . VARIABLE
 
@@ -513,7 +511,7 @@ state 30
     BOOL            shift and go to state 23
     VARIABLE        shift and go to state 24
 
-    string_expression              shift and go to state 39
+    value_expression               shift and go to state 39
     string                         shift and go to state 17
     integer                        shift and go to state 18
     boolean                        shift and go to state 19
@@ -521,17 +519,17 @@ state 30
 
 state 31
 
-    (27) integer -> string_expression INT_OP . string_expression
-    (15) string_expression -> . string
-    (16) string_expression -> . integer
-    (17) string_expression -> . boolean
-    (18) string_expression -> . variable
-    (19) string_expression -> . string_expression POINT string_expression
+    (27) integer -> value_expression INT_OP . value_expression
+    (15) value_expression -> . string
+    (16) value_expression -> . integer
+    (17) value_expression -> . boolean
+    (18) value_expression -> . variable
+    (19) value_expression -> . value_expression POINT value_expression
     (26) string -> . STR
-    (27) integer -> . string_expression INT_OP string_expression
+    (27) integer -> . value_expression INT_OP value_expression
     (28) integer -> . INT
-    (20) boolean -> . string_expression ANDOR string_expression
-    (21) boolean -> . string_expression COMPARE string_expression
+    (20) boolean -> . value_expression ANDOR value_expression
+    (21) boolean -> . value_expression COMPARE value_expression
     (29) boolean -> . BOOL
     (25) variable -> . VARIABLE
 
@@ -540,7 +538,7 @@ state 31
     BOOL            shift and go to state 23
     VARIABLE        shift and go to state 24
 
-    string_expression              shift and go to state 40
+    value_expression               shift and go to state 40
     string                         shift and go to state 17
     integer                        shift and go to state 18
     boolean                        shift and go to state 19
@@ -548,17 +546,17 @@ state 31
 
 state 32
 
-    (20) boolean -> string_expression ANDOR . string_expression
-    (15) string_expression -> . string
-    (16) string_expression -> . integer
-    (17) string_expression -> . boolean
-    (18) string_expression -> . variable
-    (19) string_expression -> . string_expression POINT string_expression
+    (20) boolean -> value_expression ANDOR . value_expression
+    (15) value_expression -> . string
+    (16) value_expression -> . integer
+    (17) value_expression -> . boolean
+    (18) value_expression -> . variable
+    (19) value_expression -> . value_expression POINT value_expression
     (26) string -> . STR
-    (27) integer -> . string_expression INT_OP string_expression
+    (27) integer -> . value_expression INT_OP value_expression
     (28) integer -> . INT
-    (20) boolean -> . string_expression ANDOR string_expression
-    (21) boolean -> . string_expression COMPARE string_expression
+    (20) boolean -> . value_expression ANDOR value_expression
+    (21) boolean -> . value_expression COMPARE value_expression
     (29) boolean -> . BOOL
     (25) variable -> . VARIABLE
 
@@ -567,7 +565,7 @@ state 32
     BOOL            shift and go to state 23
     VARIABLE        shift and go to state 24
 
-    string_expression              shift and go to state 41
+    value_expression               shift and go to state 41
     string                         shift and go to state 17
     integer                        shift and go to state 18
     boolean                        shift and go to state 19
@@ -575,17 +573,17 @@ state 32
 
 state 33
 
-    (21) boolean -> string_expression COMPARE . string_expression
-    (15) string_expression -> . string
-    (16) string_expression -> . integer
-    (17) string_expression -> . boolean
-    (18) string_expression -> . variable
-    (19) string_expression -> . string_expression POINT string_expression
+    (21) boolean -> value_expression COMPARE . value_expression
+    (15) value_expression -> . string
+    (16) value_expression -> . integer
+    (17) value_expression -> . boolean
+    (18) value_expression -> . variable
+    (19) value_expression -> . value_expression POINT value_expression
     (26) string -> . STR
-    (27) integer -> . string_expression INT_OP string_expression
+    (27) integer -> . value_expression INT_OP value_expression
     (28) integer -> . INT
-    (20) boolean -> . string_expression ANDOR string_expression
-    (21) boolean -> . string_expression COMPARE string_expression
+    (20) boolean -> . value_expression ANDOR value_expression
+    (21) boolean -> . value_expression COMPARE value_expression
     (29) boolean -> . BOOL
     (25) variable -> . VARIABLE
 
@@ -594,7 +592,7 @@ state 33
     BOOL            shift and go to state 23
     VARIABLE        shift and go to state 24
 
-    string_expression              shift and go to state 42
+    value_expression               shift and go to state 42
     string                         shift and go to state 17
     integer                        shift and go to state 18
     boolean                        shift and go to state 19
@@ -615,13 +613,13 @@ state 34
 
 state 35
 
-    (13) expression -> VARIABLE AFFECT string_expression .
-    (19) string_expression -> string_expression . POINT string_expression
-    (27) integer -> string_expression . INT_OP string_expression
-    (20) boolean -> string_expression . ANDOR string_expression
-    (21) boolean -> string_expression . COMPARE string_expression
+    (13) expression -> VARIABLE AFFECT value_expression .
+    (19) value_expression -> value_expression . POINT value_expression
+    (27) integer -> value_expression . INT_OP value_expression
+    (20) boolean -> value_expression . ANDOR value_expression
+    (21) boolean -> value_expression . COMPARE value_expression
 
-    SEMICOLON       reduce using rule 13 (expression -> VARIABLE AFFECT string_expression .)
+    SEMICOLON       reduce using rule 13 (expression -> VARIABLE AFFECT value_expression .)
     POINT           shift and go to state 30
     INT_OP          shift and go to state 31
     ANDOR           shift and go to state 32
@@ -652,11 +650,11 @@ state 38
     (12) expression -> IF boolean DO . expression_list ENDIF
     (7) expression_list -> . expression SEMICOLON expression_list
     (8) expression_list -> . expression SEMICOLON
-    (9) expression -> . PRINT string_expression
+    (9) expression -> . PRINT value_expression
     (10) expression -> . FOR VARIABLE IN variable DO expression_list ENDFOR
     (11) expression -> . FOR VARIABLE IN string_list DO expression_list ENDFOR
     (12) expression -> . IF boolean DO expression_list ENDIF
-    (13) expression -> . VARIABLE AFFECT string_expression
+    (13) expression -> . VARIABLE AFFECT value_expression
     (14) expression -> . VARIABLE AFFECT string_list
 
     PRINT           shift and go to state 10
@@ -669,20 +667,20 @@ state 38
 
 state 39
 
-    (19) string_expression -> string_expression POINT string_expression .
-    (19) string_expression -> string_expression . POINT string_expression
-    (27) integer -> string_expression . INT_OP string_expression
-    (20) boolean -> string_expression . ANDOR string_expression
-    (21) boolean -> string_expression . COMPARE string_expression
+    (19) value_expression -> value_expression POINT value_expression .
+    (19) value_expression -> value_expression . POINT value_expression
+    (27) integer -> value_expression . INT_OP value_expression
+    (20) boolean -> value_expression . ANDOR value_expression
+    (21) boolean -> value_expression . COMPARE value_expression
 
-    POINT           reduce using rule 19 (string_expression -> string_expression POINT string_expression .)
-    ANDOR           reduce using rule 19 (string_expression -> string_expression POINT string_expression .)
-    COMPARE         reduce using rule 19 (string_expression -> string_expression POINT string_expression .)
-    SEMICOLON       reduce using rule 19 (string_expression -> string_expression POINT string_expression .)
-    DO              reduce using rule 19 (string_expression -> string_expression POINT string_expression .)
+    POINT           reduce using rule 19 (value_expression -> value_expression POINT value_expression .)
+    ANDOR           reduce using rule 19 (value_expression -> value_expression POINT value_expression .)
+    COMPARE         reduce using rule 19 (value_expression -> value_expression POINT value_expression .)
+    SEMICOLON       reduce using rule 19 (value_expression -> value_expression POINT value_expression .)
+    DO              reduce using rule 19 (value_expression -> value_expression POINT value_expression .)
     INT_OP          shift and go to state 31
 
-  ! INT_OP          [ reduce using rule 19 (string_expression -> string_expression POINT string_expression .) ]
+  ! INT_OP          [ reduce using rule 19 (value_expression -> value_expression POINT value_expression .) ]
   ! POINT           [ shift and go to state 30 ]
   ! ANDOR           [ shift and go to state 32 ]
   ! COMPARE         [ shift and go to state 33 ]
@@ -690,18 +688,18 @@ state 39
 
 state 40
 
-    (27) integer -> string_expression INT_OP string_expression .
-    (19) string_expression -> string_expression . POINT string_expression
-    (27) integer -> string_expression . INT_OP string_expression
-    (20) boolean -> string_expression . ANDOR string_expression
-    (21) boolean -> string_expression . COMPARE string_expression
+    (27) integer -> value_expression INT_OP value_expression .
+    (19) value_expression -> value_expression . POINT value_expression
+    (27) integer -> value_expression . INT_OP value_expression
+    (20) boolean -> value_expression . ANDOR value_expression
+    (21) boolean -> value_expression . COMPARE value_expression
 
-    POINT           reduce using rule 27 (integer -> string_expression INT_OP string_expression .)
-    INT_OP          reduce using rule 27 (integer -> string_expression INT_OP string_expression .)
-    ANDOR           reduce using rule 27 (integer -> string_expression INT_OP string_expression .)
-    COMPARE         reduce using rule 27 (integer -> string_expression INT_OP string_expression .)
-    SEMICOLON       reduce using rule 27 (integer -> string_expression INT_OP string_expression .)
-    DO              reduce using rule 27 (integer -> string_expression INT_OP string_expression .)
+    POINT           reduce using rule 27 (integer -> value_expression INT_OP value_expression .)
+    INT_OP          reduce using rule 27 (integer -> value_expression INT_OP value_expression .)
+    ANDOR           reduce using rule 27 (integer -> value_expression INT_OP value_expression .)
+    COMPARE         reduce using rule 27 (integer -> value_expression INT_OP value_expression .)
+    SEMICOLON       reduce using rule 27 (integer -> value_expression INT_OP value_expression .)
+    DO              reduce using rule 27 (integer -> value_expression INT_OP value_expression .)
 
   ! POINT           [ shift and go to state 30 ]
   ! INT_OP          [ shift and go to state 31 ]
@@ -711,46 +709,46 @@ state 40
 
 state 41
 
-    (20) boolean -> string_expression ANDOR string_expression .
-    (19) string_expression -> string_expression . POINT string_expression
-    (27) integer -> string_expression . INT_OP string_expression
-    (20) boolean -> string_expression . ANDOR string_expression
-    (21) boolean -> string_expression . COMPARE string_expression
+    (20) boolean -> value_expression ANDOR value_expression .
+    (19) value_expression -> value_expression . POINT value_expression
+    (27) integer -> value_expression . INT_OP value_expression
+    (20) boolean -> value_expression . ANDOR value_expression
+    (21) boolean -> value_expression . COMPARE value_expression
 
   ! shift/reduce conflict for POINT resolved as shift
   ! shift/reduce conflict for INT_OP resolved as shift
   ! shift/reduce conflict for ANDOR resolved as shift
   ! shift/reduce conflict for COMPARE resolved as shift
-    SEMICOLON       reduce using rule 20 (boolean -> string_expression ANDOR string_expression .)
-    DO              reduce using rule 20 (boolean -> string_expression ANDOR string_expression .)
+    SEMICOLON       reduce using rule 20 (boolean -> value_expression ANDOR value_expression .)
+    DO              reduce using rule 20 (boolean -> value_expression ANDOR value_expression .)
     POINT           shift and go to state 30
     INT_OP          shift and go to state 31
     ANDOR           shift and go to state 32
     COMPARE         shift and go to state 33
 
-  ! POINT           [ reduce using rule 20 (boolean -> string_expression ANDOR string_expression .) ]
-  ! INT_OP          [ reduce using rule 20 (boolean -> string_expression ANDOR string_expression .) ]
-  ! ANDOR           [ reduce using rule 20 (boolean -> string_expression ANDOR string_expression .) ]
-  ! COMPARE         [ reduce using rule 20 (boolean -> string_expression ANDOR string_expression .) ]
+  ! POINT           [ reduce using rule 20 (boolean -> value_expression ANDOR value_expression .) ]
+  ! INT_OP          [ reduce using rule 20 (boolean -> value_expression ANDOR value_expression .) ]
+  ! ANDOR           [ reduce using rule 20 (boolean -> value_expression ANDOR value_expression .) ]
+  ! COMPARE         [ reduce using rule 20 (boolean -> value_expression ANDOR value_expression .) ]
 
 
 state 42
 
-    (21) boolean -> string_expression COMPARE string_expression .
-    (19) string_expression -> string_expression . POINT string_expression
-    (27) integer -> string_expression . INT_OP string_expression
-    (20) boolean -> string_expression . ANDOR string_expression
-    (21) boolean -> string_expression . COMPARE string_expression
+    (21) boolean -> value_expression COMPARE value_expression .
+    (19) value_expression -> value_expression . POINT value_expression
+    (27) integer -> value_expression . INT_OP value_expression
+    (20) boolean -> value_expression . ANDOR value_expression
+    (21) boolean -> value_expression . COMPARE value_expression
 
-    ANDOR           reduce using rule 21 (boolean -> string_expression COMPARE string_expression .)
-    COMPARE         reduce using rule 21 (boolean -> string_expression COMPARE string_expression .)
-    SEMICOLON       reduce using rule 21 (boolean -> string_expression COMPARE string_expression .)
-    DO              reduce using rule 21 (boolean -> string_expression COMPARE string_expression .)
+    ANDOR           reduce using rule 21 (boolean -> value_expression COMPARE value_expression .)
+    COMPARE         reduce using rule 21 (boolean -> value_expression COMPARE value_expression .)
+    SEMICOLON       reduce using rule 21 (boolean -> value_expression COMPARE value_expression .)
+    DO              reduce using rule 21 (boolean -> value_expression COMPARE value_expression .)
     POINT           shift and go to state 30
     INT_OP          shift and go to state 31
 
-  ! POINT           [ reduce using rule 21 (boolean -> string_expression COMPARE string_expression .) ]
-  ! INT_OP          [ reduce using rule 21 (boolean -> string_expression COMPARE string_expression .) ]
+  ! POINT           [ reduce using rule 21 (boolean -> value_expression COMPARE value_expression .) ]
+  ! INT_OP          [ reduce using rule 21 (boolean -> value_expression COMPARE value_expression .) ]
   ! ANDOR           [ shift and go to state 32 ]
   ! COMPARE         [ shift and go to state 33 ]
 
@@ -797,11 +795,11 @@ state 48
     (10) expression -> FOR VARIABLE IN variable DO . expression_list ENDFOR
     (7) expression_list -> . expression SEMICOLON expression_list
     (8) expression_list -> . expression SEMICOLON
-    (9) expression -> . PRINT string_expression
+    (9) expression -> . PRINT value_expression
     (10) expression -> . FOR VARIABLE IN variable DO expression_list ENDFOR
     (11) expression -> . FOR VARIABLE IN string_list DO expression_list ENDFOR
     (12) expression -> . IF boolean DO expression_list ENDIF
-    (13) expression -> . VARIABLE AFFECT string_expression
+    (13) expression -> . VARIABLE AFFECT value_expression
     (14) expression -> . VARIABLE AFFECT string_list
 
     PRINT           shift and go to state 10
@@ -817,11 +815,11 @@ state 49
     (11) expression -> FOR VARIABLE IN string_list DO . expression_list ENDFOR
     (7) expression_list -> . expression SEMICOLON expression_list
     (8) expression_list -> . expression SEMICOLON
-    (9) expression -> . PRINT string_expression
+    (9) expression -> . PRINT value_expression
     (10) expression -> . FOR VARIABLE IN variable DO expression_list ENDFOR
     (11) expression -> . FOR VARIABLE IN string_list DO expression_list ENDFOR
     (12) expression -> . IF boolean DO expression_list ENDIF
-    (13) expression -> . VARIABLE AFFECT string_expression
+    (13) expression -> . VARIABLE AFFECT value_expression
     (14) expression -> . VARIABLE AFFECT string_list
 
     PRINT           shift and go to state 10

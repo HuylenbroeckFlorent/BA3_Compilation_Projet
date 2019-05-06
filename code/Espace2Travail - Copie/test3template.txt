@@ -1,0 +1,10 @@
+<html>
+  <head><title>{{ print nom; }}</title></head>
+  <body>
+    <hi>{{ print nom; }}</hi>
+    {{
+             i := 5;
+             print nom;
+             print i;
+    }}
+

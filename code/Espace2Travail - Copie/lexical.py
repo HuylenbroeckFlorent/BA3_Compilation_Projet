@@ -3,7 +3,7 @@ import queue
 
 npar = 0
 
-
+#bannednames=['true','false','for','endfor','in','do','if','else','endif','print','and','or']
 usednames={}  #Les variables
              
 states = (
@@ -13,28 +13,35 @@ states = (
 
 tokens = (
         'TXT',
+        #Partie DATA
         'BLOCKstart', 'BLOCKend', 
         'BOOL', 'ANDOR', 'PRINT', 'ELSE', 'FOR', 'IN', 'ENDFOR', 'DO', 'IF', 'ENDIF',
         'AFFECT', 'VARIABLE', 'SEMICOLON', 'COMA', 'LPAREN', 'RPAREN', 'APOSTROPHE', 'STR',
+        #Partie TEMPLATE
+        #'ADD_OP', 'MUL_OP' ,
         'INT_OP', 'COMPARE', 'POINT','INT'
+        #, 'newline'
          )
 
 t_BLOCK_INT_OP = r'\+|-|\*|/'
+#t_BLOCK_MUL_OP = r'\*|/'
+#t_COMA = r','
 t_BLOCK_COMA = r','
+
+#t_BLOCK_BOOL = r'true|false'
+#t_BLOCK_ANDOR = r'and|or'
+#t_BLOCK_PRINT = r'print'
+#t_BLOCK_ELSE = r'else'
+#t_BLOCK_FOR = r'for'
+#t_BLOCK_IN = r'in'
+#t_BLOCK_ENDFOR = r'endfor'
+#t_BLOCK_DO = r'do'
+#t_BLOCK_IF = r'if'
+#t_BLOCK_ENDIF = r'endif'
+
 t_BLOCK_POINT = r'\.'
+t_BLOCK_COMPARE = r'<|>|<=|>=|=|!='
 t_BLOCK_ignore = ' \t'
-
-def t_BLOCK_IF(t):
-    r'if'
-    return t
-
-def t_BLOCK_ENDIF(t):
-    r'endif'
-    return t
-
-def t_BLOCK_COMPARE(t):
-    r'<=|>=|<|>|!=|='
-    return t
 
 def t_BLOCK_LPAREN(t):
     r'\('
@@ -79,6 +86,14 @@ def t_BLOCK_FOR(t):
     r'for'
     return t
 
+def t_BLOCK_ENDIF(t):
+    r'endif'
+    return t
+
+def t_BLOCK_IF(t):
+    r'if'
+    return t
+
 def t_BLOCK_ENDFOR(t):
     r'endfor'
     return t
@@ -110,7 +125,7 @@ def t_BLOCK_VARIABLE(t):
         return t
     else:
         usednames[t.value]= None
-        return t           
+        return t             #Penser à également virer les nom de variables réservés (comme "for")
 
 def t_BLOCK_SEMICOLON(t):
     r';'
@@ -119,6 +134,7 @@ def t_BLOCK_SEMICOLON(t):
 def t_BLOCK_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
+    #print(t.lexer.lineno)
 
 def t_BLOCK_APOSTROPHE(t):
     r'\''
@@ -129,7 +145,7 @@ def t_STRING_APOSTROPHE(t):
     t.lexer.begin('BLOCK')
     
 def t_STRING_STR(t):
-    r"[^']+"  
+    r"[^']+"  #tout jusqu'à ', need peut être un gestionnaire d'erreur au cas où pas de '
     return t
 
 def t_newline(t):
@@ -138,6 +154,7 @@ def t_newline(t):
 
 def t_TXT(t):
     r'[^({{)]+'
+    #print("<<<<<<<<<<<< current:",t.lexer.lineno," + ",str(t.value).count("\n"),">>>>>>>>>>>>>")
     t.lexer.lineno += str(t.value).count("\n")
     return t
 
@@ -162,3 +179,19 @@ if __name__ == "__main__":
     for token in lexer:
         print("line %d : %s (%s) " % (token.lineno, token.type, token.value))
 
+
+"""
+banned = {
+    'true':'BOOL',
+    'false':'BOOL',
+    'and':'COMPARE', 
+    'or':'COMPARE',    
+    'print':'PRINT',
+    'in':'IN',
+    'do':'DO',
+    'if':'IF',
+    'else':'ELSE',
+    'endif':'ENDIF',}
+    #for
+    t.type = banned.get(t.value,'VARIABLE')
+"""

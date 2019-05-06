@@ -1,0 +1,4 @@
+{{
+         if ook != 8 do print nom; endif;
+         if ook > 8 do print nom; endif;
+}}

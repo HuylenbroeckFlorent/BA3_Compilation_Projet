@@ -1,0 +1,7 @@
+{{
+nom := 'Voyage en enfer';
+liste_photo := ('Gorges', 'Goufres', 'Cols');
+yupe := true;
+nope := false;
+ook := 95;
+}}

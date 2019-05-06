@@ -5,9 +5,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftCOMPAREleftPOINTleftADD_OPleftMUL_OPrightCOMPARETXT BLOCKstart BLOCKend BOOL ANDOR PRINT ELSE FOR IN ENDFOR DO IF ENDIF AFFECT VARIABLE SEMICOLON COMA LPAREN RPAREN APOSTROPHE STR ADD_OP MUL_OP INT COMPARE POINTprogramme : txtprogramme : txt programmeprogramme : dumbo_blocprogramme : dumbo_bloc programmetxt : TXTdumbo_bloc : BLOCKstart expression_list BLOCKendexpression_list : expression SEMICOLON expression_listexpression_list : expression SEMICOLONexpression : PRINT string_expressionexpression : FOR VARIABLE IN variable DO expression_list ENDFOR \n    expression : FOR VARIABLE IN string_list DO expression_list ENDFORexpression : VARIABLE AFFECT string_expressionexpression : VARIABLE AFFECT string_liststring_expression : stringstring_expression : variablestring_expression : string_expression POINT string_expressionstring_list : LPAREN string_list_interior RPARENstring_list_interior : string COMA string_list_interiorstring_list_interior : stringvariable : VARIABLEstring : STR'
+_lr_signature = 'leftCOMPAREleftPOINTleftINT_OPrightCOMPARETXT BLOCKstart BLOCKend BOOL ANDOR PRINT ELSE FOR IN ENDFOR DO IF ENDIF AFFECT VARIABLE SEMICOLON COMA LPAREN RPAREN APOSTROPHE STR INT_OP COMPARE POINT INTprogramme : txtprogramme : txt programmeprogramme : dumbo_blocprogramme : dumbo_bloc programmetxt : TXTdumbo_bloc : BLOCKstart expression_list BLOCKendexpression_list : expression SEMICOLON expression_listexpression_list : expression SEMICOLONexpression : PRINT string_expressionexpression : FOR VARIABLE IN variable DO expression_list ENDFOR \n    expression : FOR VARIABLE IN string_list DO expression_list ENDFORexpression : IF boolean DO expression_list ENDIFexpression : VARIABLE AFFECT string_expression\n    expression : VARIABLE AFFECT string_liststring_expression : string\n    string_expression : integer\n    string_expression : booleanstring_expression : variablestring_expression : string_expression POINT string_expressionboolean : string_expression ANDOR string_expression\n    boolean : string_expression COMPARE string_expressionstring_list : LPAREN string_list_interior RPARENstring_list_interior : string COMA string_list_interiorstring_list_interior : stringvariable : VARIABLEstring : STRinteger : string_expression INT_OP string_expressioninteger : INTboolean : BOOL'
     
-_lr_action_items = {'TXT':([0,2,3,4,13,],[4,4,4,-5,-6,]),'BLOCKstart':([0,2,3,4,13,],[5,5,5,-5,-6,]),'$end':([1,2,3,4,6,7,13,],[0,-1,-3,-5,-2,-4,-6,]),'PRINT':([5,14,33,34,],[10,10,10,10,]),'FOR':([5,14,33,34,],[11,11,11,11,]),'VARIABLE':([5,10,11,14,21,23,24,33,34,],[12,19,20,12,19,19,19,12,12,]),'BLOCKend':([8,14,22,],[13,-8,-7,]),'SEMICOLON':([9,15,16,17,18,19,25,26,28,35,40,41,],[14,-9,-14,-15,-21,-20,-12,-13,-16,-17,-10,-11,]),'STR':([10,21,23,27,36,],[18,18,18,18,18,]),'AFFECT':([12,],[21,]),'ENDFOR':([14,22,37,38,],[-8,-7,40,41,]),'POINT':([15,16,17,18,19,25,28,],[23,-14,-15,-21,-20,23,-16,]),'COMA':([18,32,],[-21,36,]),'RPAREN':([18,31,32,39,],[-21,35,-19,-18,]),'DO':([19,29,30,35,],[-20,33,34,-17,]),'IN':([20,],[24,]),'LPAREN':([21,24,],[27,27,]),}
+_lr_action_items = {'TXT':([0,2,3,4,14,],[4,4,4,-5,-6,]),'BLOCKstart':([0,2,3,4,14,],[5,5,5,-5,-6,]),'$end':([1,2,3,4,6,7,14,],[0,-1,-3,-5,-2,-4,-6,]),'PRINT':([5,15,38,48,49,],[10,10,10,10,10,]),'FOR':([5,15,38,48,49,],[11,11,11,11,11,]),'IF':([5,15,38,48,49,],[13,13,13,13,13,]),'VARIABLE':([5,10,11,13,15,26,30,31,32,33,34,38,48,49,],[12,24,25,24,12,24,24,24,24,24,24,12,12,12,]),'BLOCKend':([8,15,29,],[14,-8,-7,]),'SEMICOLON':([9,16,17,18,19,20,21,22,23,24,35,36,39,40,41,42,50,52,56,57,],[15,-9,-15,-16,-17,-18,-26,-28,-29,-25,-13,-14,-19,-27,-20,-21,-22,-12,-10,-11,]),'STR':([10,13,26,30,31,32,33,37,51,],[21,21,21,21,21,21,21,21,21,]),'INT':([10,13,26,30,31,32,33,],[22,22,22,22,22,22,22,]),'BOOL':([10,13,26,30,31,32,33,],[23,23,23,23,23,23,23,]),'AFFECT':([12,],[26,]),'ENDIF':([15,29,47,],[-8,-7,52,]),'ENDFOR':([15,29,53,54,],[-8,-7,56,57,]),'POINT':([16,17,18,19,20,21,22,23,24,27,28,35,39,40,41,42,],[30,-15,-16,-17,-18,-26,-28,-29,-25,-17,30,30,-19,-27,30,30,]),'INT_OP':([16,17,18,19,20,21,22,23,24,27,28,35,39,40,41,42,],[31,-15,-16,-17,-18,-26,-28,-29,-25,-17,31,31,31,-27,31,31,]),'ANDOR':([16,17,18,19,20,21,22,23,24,27,28,35,39,40,41,42,],[32,-15,-16,-17,-18,-26,-28,-29,-25,-17,32,32,-19,-27,32,-21,]),'COMPARE':([16,17,18,19,20,21,22,23,24,27,28,35,39,40,41,42,],[33,-15,-16,-17,-18,-26,-28,-29,-25,-17,33,33,-19,-27,33,-21,]),'DO':([17,18,19,20,21,22,23,24,27,39,40,41,42,43,44,50,],[-15,-16,-17,-18,-26,-28,-29,-25,38,-19,-27,-20,-21,48,49,-22,]),'COMA':([21,46,],[-26,51,]),'RPAREN':([21,45,46,55,],[-26,50,-24,-23,]),'IN':([25,],[34,]),'LPAREN':([26,34,],[37,37,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'programme':([0,2,3,],[1,6,7,]),'txt':([0,2,3,],[2,2,2,]),'dumbo_bloc':([0,2,3,],[3,3,3,]),'expression_list':([5,14,33,34,],[8,22,37,38,]),'expression':([5,14,33,34,],[9,9,9,9,]),'string_expression':([10,21,23,],[15,25,28,]),'string':([10,21,23,27,36,],[16,16,16,32,32,]),'variable':([10,21,23,24,],[17,17,17,29,]),'string_list':([21,24,],[26,30,]),'string_list_interior':([27,36,],[31,39,]),}
+_lr_goto_items = {'programme':([0,2,3,],[1,6,7,]),'txt':([0,2,3,],[2,2,2,]),'dumbo_bloc':([0,2,3,],[3,3,3,]),'expression_list':([5,15,38,48,49,],[8,29,47,53,54,]),'expression':([5,15,38,48,49,],[9,9,9,9,9,]),'string_expression':([10,13,26,30,31,32,33,],[16,28,35,39,40,41,42,]),'string':([10,13,26,30,31,32,33,37,51,],[17,17,17,17,17,17,17,46,46,]),'integer':([10,13,26,30,31,32,33,],[18,18,18,18,18,18,18,]),'boolean':([10,13,26,30,31,32,33,],[19,27,19,19,19,19,19,]),'variable':([10,13,26,30,31,32,33,34,],[20,20,20,20,20,20,20,43,]),'string_list':([26,34,],[36,44,]),'string_list_interior':([37,51,],[45,55,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,25 +26,33 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> programme","S'",1,None,None,None),
-  ('programme -> txt','programme',1,'p_programme_txt','syntaxic.py',153),
-  ('programme -> txt programme','programme',2,'p_programme_txtprog','syntaxic.py',157),
-  ('programme -> dumbo_bloc','programme',1,'p_programme_dumboblock','syntaxic.py',161),
-  ('programme -> dumbo_bloc programme','programme',2,'p_programme_dumboblockprog','syntaxic.py',165),
-  ('txt -> TXT','txt',1,'p_txt','syntaxic.py',169),
-  ('dumbo_bloc -> BLOCKstart expression_list BLOCKend','dumbo_bloc',3,'p_dumbo_block','syntaxic.py',173),
-  ('expression_list -> expression SEMICOLON expression_list','expression_list',3,'p_expression_list_exprl','syntaxic.py',183),
-  ('expression_list -> expression SEMICOLON','expression_list',2,'p_expression_list','syntaxic.py',189),
-  ('expression -> PRINT string_expression','expression',2,'p_expression_print','syntaxic.py',193),
-  ('expression -> FOR VARIABLE IN variable DO expression_list ENDFOR','expression',7,'p_expression_for','syntaxic.py',205),
-  ('expression -> FOR VARIABLE IN string_list DO expression_list ENDFOR','expression',7,'p_expression_for','syntaxic.py',206),
-  ('expression -> VARIABLE AFFECT string_expression','expression',3,'p_expression_varstring','syntaxic.py',210),
-  ('expression -> VARIABLE AFFECT string_list','expression',3,'p_expression_varlist','syntaxic.py',214),
-  ('string_expression -> string','string_expression',1,'p_string_expression_string','syntaxic.py',218),
-  ('string_expression -> variable','string_expression',1,'p_string_expression_var','syntaxic.py',222),
-  ('string_expression -> string_expression POINT string_expression','string_expression',3,'p_string_expression_strstr','syntaxic.py',226),
-  ('string_list -> LPAREN string_list_interior RPAREN','string_list',3,'p_string_list','syntaxic.py',230),
-  ('string_list_interior -> string COMA string_list_interior','string_list_interior',3,'p_string_list_interior','syntaxic.py',234),
-  ('string_list_interior -> string','string_list_interior',1,'p_string_list_interior_end','syntaxic.py',242),
-  ('variable -> VARIABLE','variable',1,'p_variable','syntaxic.py',246),
-  ('string -> STR','string',1,'p_string','syntaxic.py',250),
+  ('programme -> txt','programme',1,'p_programme_txt','syntaxic.py',181),
+  ('programme -> txt programme','programme',2,'p_programme_txtprog','syntaxic.py',185),
+  ('programme -> dumbo_bloc','programme',1,'p_programme_dumboblock','syntaxic.py',189),
+  ('programme -> dumbo_bloc programme','programme',2,'p_programme_dumboblockprog','syntaxic.py',193),
+  ('txt -> TXT','txt',1,'p_txt','syntaxic.py',197),
+  ('dumbo_bloc -> BLOCKstart expression_list BLOCKend','dumbo_bloc',3,'p_dumbo_block','syntaxic.py',201),
+  ('expression_list -> expression SEMICOLON expression_list','expression_list',3,'p_expression_list_exprl','syntaxic.py',211),
+  ('expression_list -> expression SEMICOLON','expression_list',2,'p_expression_list','syntaxic.py',217),
+  ('expression -> PRINT string_expression','expression',2,'p_expression_print','syntaxic.py',221),
+  ('expression -> FOR VARIABLE IN variable DO expression_list ENDFOR','expression',7,'p_expression_for','syntaxic.py',233),
+  ('expression -> FOR VARIABLE IN string_list DO expression_list ENDFOR','expression',7,'p_expression_for','syntaxic.py',234),
+  ('expression -> IF boolean DO expression_list ENDIF','expression',5,'p_if','syntaxic.py',238),
+  ('expression -> VARIABLE AFFECT string_expression','expression',3,'p_expression_varstring','syntaxic.py',243),
+  ('expression -> VARIABLE AFFECT string_list','expression',3,'p_expression_varstring','syntaxic.py',244),
+  ('string_expression -> string','string_expression',1,'p_string_expression_string','syntaxic.py',255),
+  ('string_expression -> integer','string_expression',1,'p_string_expression_string','syntaxic.py',256),
+  ('string_expression -> boolean','string_expression',1,'p_string_expression_string','syntaxic.py',257),
+  ('string_expression -> variable','string_expression',1,'p_string_expression_var','syntaxic.py',261),
+  ('string_expression -> string_expression POINT string_expression','string_expression',3,'p_string_expression_strstr','syntaxic.py',265),
+  ('boolean -> string_expression ANDOR string_expression','boolean',3,'p_boolean_andorresult','syntaxic.py',269),
+  ('boolean -> string_expression COMPARE string_expression','boolean',3,'p_boolean_andorresult','syntaxic.py',270),
+  ('string_list -> LPAREN string_list_interior RPAREN','string_list',3,'p_string_list','syntaxic.py',275),
+  ('string_list_interior -> string COMA string_list_interior','string_list_interior',3,'p_string_list_interior','syntaxic.py',279),
+  ('string_list_interior -> string','string_list_interior',1,'p_string_list_interior_end','syntaxic.py',287),
+  ('variable -> VARIABLE','variable',1,'p_variable','syntaxic.py',291),
+  ('string -> STR','string',1,'p_string','syntaxic.py',295),
+  ('integer -> string_expression INT_OP string_expression','integer',3,'p_int_operation','syntaxic.py',299),
+  ('integer -> INT','integer',1,'p_int','syntaxic.py',303),
+  ('boolean -> BOOL','boolean',1,'p_bool','syntaxic.py',307),
 ]
